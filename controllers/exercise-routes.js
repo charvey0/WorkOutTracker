@@ -5,9 +5,19 @@ const { Workout } = require('../models');
 
 router.get('', async (req, res) => {
   if (req.query.id){
-    res.json({message: "/exercise? works!"});
+    try {
+      const workoutData = await Workout.find({ _id: req.params.id});
+      res.status(200).json(workoutData); 
+    } catch (error) {
+      res.status(500).json(error);
+    }
   } else {
-    res.json({message: "/exercise works!"});
+    try {
+      const workoutData = await Workout.find({ });
+      res.status(200).json(workoutData); 
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 });
 
