@@ -42,4 +42,15 @@ router.put('/:id', (req, res) => {
   })
 });
 
+router.get('/range', (req, res) => {
+  Workout.find({})
+  .then(workoutData => {
+    res.status(200).json(workoutData); 
+  })
+  .catch(err => {
+  res.status(500).json(err);
+  })
+});
+
+
 module.exports = router;
