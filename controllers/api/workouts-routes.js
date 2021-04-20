@@ -4,6 +4,7 @@ const Workout = require('../../models/workout');
 // The `/api/workouts` endpoint
 router.get('/range', (req, res) => {
     Workout.find({})
+    .limit(10)
     .then(workoutData => {
       res.status(200).json(workoutData); 
     })
@@ -23,11 +24,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', ({ body }, res) => {
-  const ex = [];
-  body.exercises.forEach(e => {
-    ex.push(e);
-  });
- Workout.create({exercises: ex})
+ Workout.create(body)
     .then(workoutData => {
       res.status(200).json(workoutData);
     })
@@ -37,16 +34,11 @@ router.post('/', ({ body }, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  Workout.findById(req.params.id)
-  .then (workoutData => {
-    const ex = workoutData.exercises;
-    req.body.exercises.forEach(e => {
-      ex.push(e);
-    });
-    Workout.findByIdAndUpdate(req.params.id, {exercises: ex});
-    console.log(ex);
-    res.status(200).json(workoutData);
-  }) 
+  Workout.findByIdAndUpdate(req.params.id, 
+    { $push: { exercises: req.body }}, { new: true })
+    .then (workoutData => {
+      res.status(200).json(workoutData);
+    })
   .catch(err => {
     res.status(500).json({message: err});
   })
