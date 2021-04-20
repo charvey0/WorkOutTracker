@@ -1,42 +1,45 @@
 const router = require('express').Router();
-const { Workout } = require('../../models');
+const Workout = require('../../models/workout');
 
 // The `/api/workouts` endpoint
-
-router.get('/', async (req, res) => {
-  try {
-    const workoutData = await Workout.find({});
-    res.status(200).json(workoutData); 
-  } catch (error) {
-    res.status(500).json(error);
-  }
+router.get('/', (req, res) => {
+    Workout.find({})
+    .then(workoutData => {
+      res.status(200).json(workoutData); 
+    })
+    .catch(err => {
+    res.status(500).json(err);
+    })
 });
 
-router.get('/:id', async (req, res) => {
-  try {
-    const workoutData = await Workout.find({ _id: req.params.id});
+router.get('/:id', (req, res) => {
+  Workout.findById(req.params.id)
+  .then(workoutData => {
     res.status(200).json(workoutData); 
-  } catch (error) {
-    res.status(500).json(error);
-  }
+  })
+  .catch(err => {
+    res.status(400).json(err);
+  });
 });
 
-router.post('/', async (req, res) => {
-  try {
-    const workoutData = await Workout.find({});
-    res.status(200).json(workoutData); 
-  } catch (error) {
-    res.status(500).json(error);
-  }
+router.post('/', ({ body }, res) => {
+   Workout.create(body)
+    .then(workoutData => {
+      res.status(200).json(workoutData);
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
 });
 
-router.put('/:id', async (req, res) => {
-  try {
-    const workoutData = await Workout.find({ _id: req.params.id});
-    res.status(200).json(workoutData); 
-  } catch (error) {
-    res.status(500).json(error);
-  }
+router.put('/:id', (req, res) => {
+  Workout.findOneAndUpdate(req.params.id, req.body)
+  .then (workoutData => {
+    res.status(200).json(workoutData);
+  }) 
+  .catch(err => {
+    res.status(500).json(err);
+  })
 });
 
 module.exports = router;
