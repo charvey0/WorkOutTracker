@@ -43,7 +43,7 @@ router.put('/:id', (req, res) => {
     req.body.exercises.forEach(e => {
       ex.push(e);
     });
-//    Workout.findOneAndUpdate({ _id: req.params.id }, {exercises: ex});
+    Workout.findByIdAndUpdate(req.params.id, {exercises: ex});
     console.log(ex);
     res.status(200).json(workoutData);
   }) 
