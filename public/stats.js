@@ -63,6 +63,7 @@ function populateChart(data) {
     options: {
       responsive: true,
       title: {
+        text: 'Time Spent',
         display: true,
       },
       scales: {
